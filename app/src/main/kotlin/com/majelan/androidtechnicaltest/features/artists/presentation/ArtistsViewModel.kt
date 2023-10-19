@@ -2,7 +2,7 @@ package com.majelan.androidtechnicaltest.features.artists.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.majelan.androidtechnicaltest.common.domain.entity.ArtistEntity
+import com.majelan.androidtechnicaltest.common.domain.entity.AlbumEntity
 import com.majelan.androidtechnicaltest.common.domain.repository.MusicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,14 +32,14 @@ class ArtistsViewModel @Inject constructor(
                     }
                 }
 
-                val artistsEntities: MutableList<ArtistEntity> = mutableListOf()
+                val artistsEntities: MutableList<AlbumEntity> = mutableListOf()
                 albums.forEach { album ->
                     val medias = response.body()?.music?.filter { it.album == album }?.toList()
                     medias?.let {
                         artistsEntities.add(
-                            ArtistEntity(
-                                album = it[0].album,
-                                name = it[0].artist,
+                            AlbumEntity(
+                                name = it[0].album,
+                                artist = it[0].artist,
                                 image = it[0].image,
                                 medias = it
                             )

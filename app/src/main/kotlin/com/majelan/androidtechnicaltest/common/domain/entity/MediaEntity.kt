@@ -1,5 +1,8 @@
 package com.majelan.androidtechnicaltest.common.domain.entity
 
+import android.net.Uri
+import com.google.gson.Gson
+
 // TODO could handle nullable data
 data class MediaEntity(
     val id: String,
@@ -13,14 +16,20 @@ data class MediaEntity(
     val totalTrackCount: Int,
     val duration: Int,
     val site: String
-)
+) {
 
-data class ArtistEntity(
+    override fun toString(): String = Uri.encode(Gson().toJson(this))
+}
+
+data class AlbumEntity(
+    val artist: String,
     val name: String,
-    val album: String,
     val image: String,
     val medias: List<MediaEntity>
-)
+) {
+
+    override fun toString(): String = Uri.encode(Gson().toJson(this))
+}
 
 data class MusicResponse(
     val music: List<MediaEntity>

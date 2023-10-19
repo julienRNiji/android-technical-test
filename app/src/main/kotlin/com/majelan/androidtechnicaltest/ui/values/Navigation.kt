@@ -2,16 +2,24 @@ package com.majelan.androidtechnicaltest.ui.values
 
 // Routes
 private const val artistsRoute = "artists"
-private const val mediasRoute = "medias"
+private const val albumRoute = "album"
+private const val playerRoute = "player"
 
 // Args
-const val mediasArg = "album"
+const val albumArg = "name"
+const val playerArg = "song"
 
 sealed class Screen(val route: String) {
     data object Artists : Screen(route = artistsRoute)
-    data object Medias : Screen(route = "$mediasRoute/{$mediasArg}") {
+    data object Album : Screen(route = "$albumRoute/{$albumArg}") {
         fun getFullRoute(album: String): String {
-            return "$mediasRoute/$album"
+            return "$albumRoute/$album"
+        }
+    }
+
+    data object Player : Screen(route = "$playerRoute/{$playerArg}") {
+        fun getFullRoute(song: String): String {
+            return "$playerRoute/$song"
         }
     }
 }

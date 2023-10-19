@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import coil.compose.AsyncImage
-import com.majelan.androidtechnicaltest.common.domain.entity.ArtistEntity
+import com.majelan.androidtechnicaltest.common.domain.entity.AlbumEntity
 import com.majelan.androidtechnicaltest.ui.values.artistImageSize
 import com.majelan.androidtechnicaltest.ui.values.basePadding
 import com.majelan.androidtechnicaltest.ui.values.bigPadding
@@ -29,7 +29,7 @@ import com.majelan.androidtechnicaltest.ui.values.titleFontSize
 @Composable
 fun ArtistsComposable(
     viewModel: ArtistsViewModel,
-    onClickToAlbum: (data: String) -> Unit
+    onClickToAlbum: (album: AlbumEntity) -> Unit
 ) {
     val uiState: UiState by viewModel.uiState.collectAsState()
 
@@ -56,7 +56,7 @@ fun ArtistsComposable(
 }
 
 @Composable
-fun ArtistList(state: UiState.Data, onClickToAlbum: (data: String) -> Unit) {
+fun ArtistList(state: UiState.Data, onClickToAlbum: (album: AlbumEntity) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(basePadding),
@@ -68,12 +68,12 @@ fun ArtistList(state: UiState.Data, onClickToAlbum: (data: String) -> Unit) {
 }
 
 @Composable
-fun ArtistItem(item: ArtistEntity, onClickToAlbum: (data: String) -> Unit) {
-    Column(modifier = Modifier.clickable { onClickToAlbum.invoke(item.album) }) { // Or pass some kind of ID
+fun ArtistItem(item: AlbumEntity, onClickToAlbum: (album: AlbumEntity) -> Unit) {
+    Column(modifier = Modifier.clickable { onClickToAlbum.invoke(item) }) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
                 model = item.image,
-                contentDescription = item.album,
+                contentDescription = item.name,
                 modifier = Modifier
                     .width(artistImageSize)
                     .height(artistImageSize)
@@ -81,12 +81,10 @@ fun ArtistItem(item: ArtistEntity, onClickToAlbum: (data: String) -> Unit) {
             Spacer(modifier = Modifier.width(basePadding))
             Column(verticalArrangement = Arrangement.Center) {
                 Text(
-                    text = item.album,
-                    style = TextStyle(
-                        fontSize = titleFontSize
-                    )
+                    text = item.name,
+                    style = TextStyle(fontSize = titleFontSize)
                 )
-                Text(text = item.name)
+                Text(text = item.artist)
             }
         }
         Spacer(modifier = Modifier.height(bigPadding))
