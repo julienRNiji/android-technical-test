@@ -20,7 +20,7 @@ class ArtistsViewModel @Inject constructor(
 
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun getMusicsBis() = viewModelScope.launch {
+    fun getMusics() = viewModelScope.launch {
         mainRepository.getMusics().let { response ->
             if (response.isSuccessful) {
                 // FIXME Extract all business logic in UC and do TU
