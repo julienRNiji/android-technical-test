@@ -22,6 +22,7 @@ import com.majelan.androidtechnicaltest.features.album.navigation.AlbumArgType
 import com.majelan.androidtechnicaltest.features.album.presentation.AlbumComposable
 import com.majelan.androidtechnicaltest.features.player.navigation.MediaArgType
 import com.majelan.androidtechnicaltest.features.player.presentation.PlayerComposable
+import com.majelan.androidtechnicaltest.features.player.presentation.PlayerViewModel
 import com.majelan.androidtechnicaltest.ui.theme.BasicComposeAppTheme
 import com.majelan.androidtechnicaltest.ui.values.Screen
 import com.majelan.androidtechnicaltest.ui.values.albumArg
@@ -79,9 +80,10 @@ class MainActivity : ComponentActivity() {
                                 type = MediaArgType()
                             }
                         )) {
+                            val playerViewModel = hiltViewModel<PlayerViewModel>()
                             val media = it.arguments?.getString(playerArg)
                                 ?.let { json -> Gson().fromJson(json, MediaEntity::class.java) }
-                            PlayerComposable(mediaEntity = media)
+                            PlayerComposable(mediaEntity = media, viewModel = playerViewModel)
                         }
                     }
                 }

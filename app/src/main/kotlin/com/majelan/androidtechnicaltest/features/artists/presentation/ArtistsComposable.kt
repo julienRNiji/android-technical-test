@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import coil.compose.AsyncImage
 import com.majelan.androidtechnicaltest.common.domain.entity.AlbumEntity
+import com.majelan.androidtechnicaltest.common.presentation.Error
+import com.majelan.androidtechnicaltest.common.presentation.Loading
 import com.majelan.androidtechnicaltest.ui.values.artistImageSize
 import com.majelan.androidtechnicaltest.ui.values.basePadding
 import com.majelan.androidtechnicaltest.ui.values.bigPadding
@@ -34,19 +36,9 @@ fun ArtistsComposable(
     val uiState: UiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
-        UiState.Error -> Text(
-            text = "Error while loading",
-            style = TextStyle(
-                fontSize = titleFontSize
-            )
-        )
+        UiState.Error -> Error()
 
-        UiState.Init -> Text(
-            text = "Loading ...",
-            style = TextStyle(
-                fontSize = titleFontSize
-            )
-        )
+        UiState.Init -> Loading()
 
         is UiState.Data -> ArtistList(
             state = uiState as UiState.Data,

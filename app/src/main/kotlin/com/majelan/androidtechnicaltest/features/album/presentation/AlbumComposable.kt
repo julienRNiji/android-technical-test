@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import coil.compose.AsyncImage
 import com.majelan.androidtechnicaltest.common.domain.entity.AlbumEntity
 import com.majelan.androidtechnicaltest.common.domain.entity.MediaEntity
+import com.majelan.androidtechnicaltest.common.presentation.Error
 import com.majelan.androidtechnicaltest.ui.values.albumImageSize
 import com.majelan.androidtechnicaltest.ui.values.artistImageSize
 import com.majelan.androidtechnicaltest.ui.values.basePadding
@@ -30,16 +31,11 @@ import com.majelan.androidtechnicaltest.ui.values.bigPadding
 import com.majelan.androidtechnicaltest.ui.values.titleFontSize
 
 @Composable
-fun AlbumComposable(album: AlbumEntity?,  onClickToMedia: (media: MediaEntity) -> Unit) {
+fun AlbumComposable(album: AlbumEntity?, onClickToMedia: (media: MediaEntity) -> Unit) {
     if (album != null) {
         AlbumComposition(album, onClickToMedia)
     } else {
-        Text(
-            text = "Error while loading",
-            style = TextStyle(
-                fontSize = titleFontSize
-            )
-        )
+        Error()
     }
 }
 
@@ -83,7 +79,7 @@ fun AlbumComposition(album: AlbumEntity, onClickToMedia: (media: MediaEntity) ->
 
 @Composable
 fun MediaItem(mediaEntity: MediaEntity, onClickToMedia: (media: MediaEntity) -> Unit) {
-    Column(modifier = Modifier.clickable { onClickToMedia.invoke(mediaEntity)}) {
+    Column(modifier = Modifier.clickable { onClickToMedia.invoke(mediaEntity) }) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
                 model = mediaEntity.image,
