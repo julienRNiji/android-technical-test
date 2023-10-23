@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -56,7 +57,7 @@ fun Player(media: MediaEntity, viewModel: PlayerViewModel) {
             )
         }
         Spacer(modifier = Modifier.height(basePadding))
-        Column(modifier = Modifier.weight(3F)) {
+        Column(modifier = Modifier.weight(2F)) {
             Text(
                 text = media.title,
                 style = TextStyle(fontSize = titleFontSize),
@@ -66,60 +67,71 @@ fun Player(media: MediaEntity, viewModel: PlayerViewModel) {
                 text = media.artist,
                 modifier = Modifier.padding(start = basePadding),
             )
-            Spacer(modifier = Modifier.height(basePadding))
+        }
+        Column(modifier = Modifier.weight(2F)) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = basePadding, end = basePadding),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.padding(start = basePadding, end = basePadding),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // FIXME WIP : Find good way to display music duration
-                val time = viewModel.timeState.collectAsState()
-                Text(text = time.value.timePlayed)
-                Text(text = time.value.duration)
+                MediaPlayer(
+                    playerState = playerState,
+                    viewModel = viewModel,
+                    media = media,
+                    modifier = Modifier.weight(1F)
+                )
+                Row(
+                    modifier = Modifier
+                        .padding(start = basePadding, end = basePadding)
+                        .weight(3F),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    val time = viewModel.timeState.collectAsState()
+                    Text(text = time.value.timePlayed)
+                    Text(text = time.value.duration)
+                }
             }
-            Spacer(modifier = Modifier.height(basePadding))
-            MediaPlayer(playerState = playerState, viewModel = viewModel, media = media)
-            Spacer(modifier = Modifier.height(basePadding))
         }
     }
 }
 
 @Composable
-fun MediaPlayer(playerState: PlayerState, viewModel: PlayerViewModel, media: MediaEntity) {
-    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-        when (playerState) {
-            PlayerState.Init -> {
-                viewModel.setMedia(MediaItem.fromUri(media.source), LocalContext.current)
-                Loading()
-            }
-
-            PlayerState.Ready -> {
-                viewModel.playMedia()
-                DisplayableText(text = "Playing...")
-            }
-
-            PlayerState.Play -> {
-                Button(onClick = { viewModel.pauseMedia() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.pause),
-                        modifier = Modifier.size(iconSize),
-                        contentDescription = "Pause"
-                    )
-                }
-            }
-
-            PlayerState.Pause -> {
-                Button(onClick = { viewModel.playMedia() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.play),
-                        modifier = Modifier.size(iconSize),
-                        contentDescription = "Play"
-                    )
-                }
-            }
-
-            else -> Error()
+fun MediaPlayer(
+    playerState: PlayerState,
+    viewModel: PlayerViewModel,
+    media: MediaEntity,
+    modifier: Modifier
+) {
+    when (playerState) {
+        PlayerState.Init -> {
+            viewModel.setMedia(MediaItem.fromUri(media.source), LocalContext.current)
+            Loading(modifier = modifier)
         }
+
+        PlayerState.Ready -> {
+            viewModel.playMedia()
+            DisplayableText(text = "Playing...", modifier = modifier)
+        }
+
+        PlayerState.Play -> {
+            Button(onClick = { viewModel.pauseMedia() }, modifier = modifier) {
+                Icon(
+                    painter = painterResource(id = R.drawable.pause),
+                    modifier = Modifier.size(iconSize),
+                    contentDescription = "Pause"
+                )
+            }
+        }
+
+        PlayerState.Pause -> {
+            Button(onClick = { viewModel.playMedia() }, modifier = modifier) {
+                Icon(
+                    painter = painterResource(id = R.drawable.play),
+                    modifier = Modifier.size(iconSize),
+                    contentDescription = "Play"
+                )
+            }
+        }
+
+        else -> Error(modifier = modifier)
     }
 }

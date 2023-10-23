@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
+private const val defaultDuration = "00:00"
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor() : ViewModel() {
@@ -28,7 +29,7 @@ class PlayerViewModel @Inject constructor() : ViewModel() {
 
     private var _playerState = MutableStateFlow<PlayerState>(PlayerState.Init)
 
-    private var _timeState = MutableStateFlow(TimeState("0:00", "0:00"))
+    private var _timeState = MutableStateFlow(TimeState(defaultDuration, defaultDuration))
 
     ///////////////////////////////////////////////////////////////////////////
     // DATA PUBLIC
@@ -79,7 +80,7 @@ class PlayerViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             flow {
                 while (true) {
-                    val timePlayed = player.duration - player.totalBufferedDuration
+                    val timePlayed = player.currentPosition
                     emit(timePlayed)
                     delay(200)
                 }
